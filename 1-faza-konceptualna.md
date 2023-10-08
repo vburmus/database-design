@@ -1,9 +1,10 @@
 # Faza konceptualna
 Projekt systemu e-recepty opiera się na potrzebach informacyjnych pacjentów, lekarzy oraz aptek. System ten ma na celu usprawnienie i zautomatyzowanie procesu przepisywania, realizacji i monitorowania recept na leki.
 * [Streszcenie](#streszczenie)
-* [Cele projektu](#cele)
+* [Cele projektu](#cele-smart)
 * [Zakres projektu](#zakres)
-* [Wymagania funkcjonalne](#wymagania)
+* [Wymagania funkcjonalne](#wymagania-funkcjonalne)
+___
 ### Streszczenie 
 Główne potrzeby informacyjne oraz czynności wyszukiwania, które można wykonać za pomocą projektowanej bazy danych:
 1. Dane pacjenta:
@@ -24,10 +25,19 @@ Główne potrzeby informacyjne oraz czynności wyszukiwania, które można wykon
 6. Statystyki i raporty:
 - Generowanie raportów statystycznych dotyczących przepisanych leków, ilości wystawionych recept i kosztów leków.
 - Analiza danych w celu monitorowania tendencji w dziedzinie farmacji i medycyny.
-
-### Cele
-
-
+___
+### Cele smart
+#### 1. Specific:
+Celem projektu jest stworzenie prototypu systemu e-recepty, który będzie demonstracją działania rozwiązania. Skupiamy się na podstawowych funkcjonalnościach, takich jak wyszukiwanie i wystawianie recept oraz przechowywanie danych leków, aptek, lekarzy, i t.p.
+#### 2. Measurable:
+Sukces projektu będzie mierzalny poprzez ocenę wzrostu efektywności w procesie przepisywania, realizacji i monitorowania recept na leki. Możemy także zmierzyć liczbę korzystających z systemu użytkowników oraz generowanych raportów wraz z ich analizą.
+#### 3. Achieable
+Uwzględniając dostępny czas oraz ilość członków jesteśmy w stanie stworzyć działającą bazę danych dla systemu e-recepty bez platformy do jej obsługi.
+#### 4. Realistic 
+Projekt jest realistyczny, ponieważ opiera się na istniejących technologiach informatycznych i potrzebach społeczności medycznej. Podobne systemy są już w użyciu, co świadczy o ich wykonalności.
+#### 5. Time-bound
+Projekt ma być zakończony w ciągu 6 miesięcy od rozpoczęcia. Podział czasu obejmuje etapy projektowania, tworzenia podstawowej wersji, przeprowadzanie testów i zbieranie opinii.
+___
 ### Zakres
 #### Należy uwzględnić:
 - Stworzenie relacyjnej bazy danych do przechowywania informacji o pacjentach, lekach, receptach, lekarzach itp.
@@ -37,4 +47,4 @@ Główne potrzeby informacyjne oraz czynności wyszukiwania, które można wykon
 - Implementacji aplikacji
 - Projektowania interfejsów graficznych
 ___
-### Wymagania
+### Wymagania funkcjonalne
