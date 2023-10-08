@@ -39,5 +39,12 @@ Projekt jest realistyczny, ponieważ opiera się na istniejących technologiach 
 Projekt ma być zakończony w ciągu 6 miesięcy od rozpoczęcia. Podział czasu obejmuje etapy projektowania, tworzenia podstawowej wersji, przeprowadzanie testów i zbieranie opinii.
 ___
 ### Zakres
-
+#### Należy uwzględnić:
+- Stworzenie relacyjnej bazy danych do przechowywania informacji o pacjentach, lekach, receptach, lekarzach itp.
+- Zapewnienie mechanizmu logowania użytkowników z różnymi poziomami dostępu.
+- Mechanizm przypisywania leków przez lekarzy.
+#### Nie należy uwzględniać:
+- Implementacji aplikacji
+- Projektowania interfejsów graficznych
+___
 ### Wymagania funkcjonalne
