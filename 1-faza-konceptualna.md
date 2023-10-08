@@ -29,6 +29,12 @@ Główne potrzeby informacyjne oraz czynności wyszukiwania, które można wykon
 
 
 ### Zakres
-
-
+#### Należy uwzględnić:
+- Stworzenie relacyjnej bazy danych do przechowywania informacji o pacjentach, lekach, receptach, lekarzach itp.
+- Zapewnienie mechanizmu logowania użytkowników z różnymi poziomami dostępu.
+- Mechanizm przypisywania leków przez lekarzy.
+#### Nie należy uwzględniać:
+- Implementacji aplikacji
+- Projektowania interfejsów graficznych
+___
 ### Wymagania
