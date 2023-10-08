@@ -1,0 +1,66 @@
+@startuml diagram
+skinparam linetype ortho
+
+rectangle "Pacjent" as pacjent {
+}
+
+rectangle "Lekarz" as lekarz {
+}
+
+rectangle "Lek" as lek {
+}
+
+rectangle "Substancja" as substancja {
+}
+
+rectangle "Apteka" as apteka {
+}
+
+rectangle "Aptekarz" as aptekarz {
+}
+
+rectangle "Specjalizacja" as specjalizacja {
+}
+
+rectangle "Recepta" as recepta {
+}
+
+rectangle "Alergia" as alergia {
+}
+
+rectangle "Dawkowanie" as substancja {
+}
+
+rectangle "Uzytkownik" as użytkownik {
+}
+
+
+rectangle "Godziny otwarcia" as godziny_otwarcia {
+}
+
+rectangle "Kategoria lekow" as kategoria_lekow {
+}
+
+rectangle "Adres" as adres {
+}
+
+
+apteka }o--o{ lek
+użytkownik ||--o| pacjent
+użytkownik ||--o| lekarz
+użytkownik ||--o| aptekarz
+apteka }o--o{ recepta
+lekarz ||--o{ specjalizacja
+pacjent ||--o{ alergia
+lekarz ||--o{ recepta
+recepta }o--o{ pacjent
+recepta }o--o{ lek
+lek }o--o{ substancja
+lek }o--o{ kategoria_lekow
+apteka ||--|| adres
+apteka ||--|| godziny_otwarcia
+aptekarz }o--o{ apteka
+alergia }o--o{ substancja
+
+
+@enduml
