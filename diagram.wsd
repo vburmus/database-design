@@ -50,13 +50,13 @@ użytkownik ||--o| pacjent
 użytkownik ||--o| lekarz
 użytkownik ||--o| aptekarz
 apteka }o--o{ recepta
-lekarz ||--o{ specjalizacja
+lekarz }o--o{ specjalizacja
 pacjent ||--o{ alergia
 lekarz ||--o{ recepta
-recepta }o--o{ pacjent
-recepta }o--o{ lek
+recepta }o--|| pacjent
+recepta }o--|{ lek
 lek }o--o{ substancja
-lek }o--o{ kategoria_lekow
+lek }o--|{ kategoria_lekow
 apteka ||--|| adres
 apteka ||--|| godziny_otwarcia
 aptekarz }o--o{ apteka
