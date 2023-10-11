@@ -4,6 +4,7 @@ Projekt systemu e-recepty opiera się na potrzebach informacyjnych pacjentów, l
 * [Cele projektu](#cele-smart)
 * [Zakres projektu](#zakres)
 * [Wymagania funkcjonalne](#wymagania-funkcjonalne)
+* [Diagram obiektowo związkowy](#diagram-obiektowo-związkowy)
 ___
 ### Streszczenie 
 Główne potrzeby informacyjne oraz czynności wyszukiwania, które można wykonać za pomocą projektowanej bazy danych:
@@ -19,10 +20,13 @@ Główne potrzeby informacyjne oraz czynności wyszukiwania, które można wykon
 4. Apteki:
 - Baza danych aptek, zawierająca informacje o lokalizacji, godzinach otwarcia i dostępności leków.
 - Wyszukiwanie aptek na podstawie potrzebnych leków lub o konkretnych godzinach otwarcia.
-5. Leki:
+5. Aptekarze:
+- Zarządzanie danymi aptekarzy, w tym informacjami kontaktowymi i miejscem pracy.
+- Wyszukiwanie aptekarzy w celu kontaktu.
+6. Leki:
 - Katalog leków, zawierający informacje o ich składzie, dawkowaniu i działaniach niepożądanych.
 - Wyszukiwanie leków na podstawie nazwy, substancji czynnej lub kategorii terapeutycznej.
-6. Statystyki i raporty:
+7. Statystyki i raporty:
 - Generowanie raportów statystycznych dotyczących przepisanych leków, ilości wystawionych recept i kosztów leków.
 - Analiza danych w celu monitorowania tendencji w dziedzinie farmacji i medycyny.
 ___
@@ -48,3 +52,24 @@ ___
 - Projektowania interfejsów graficznych
 ___
 ### Wymagania funkcjonalne
+#### 1. Pacjent
+* Logowanie do systemu
+* Wyświetlanie przypisanych recept
+* Wyświetlanie informacji o recepcie
+#### 2. Lekarz
+* Logowanie do systemu
+* Wystawianie recept dla wybranego pacjenta
+* Wyszukiwanie pacjentów
+* Wyszukiwanie leków
+#### 3. Aptekarz
+* Logowanie do systemu
+* Wyszukiwanie leków
+* Realizacja recept
+* Zarządzanie magazynem leków
+#### 4. Administrator
+* Logowanie do systemu
+* Zarządzanie kontami użytkowników
+* Zarządzanie bazą danych
+___
+### Diagram obiektowo-związkowy
+![](diagram.svg)
