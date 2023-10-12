@@ -50,17 +50,17 @@ użytkownik ||--o| pacjent
 użytkownik ||--o| lekarz
 użytkownik ||--o| aptekarz
 apteka }o--o{ recepta
-lekarz }o--o{ specjalizacja
-pacjent ||--o{ alergia
+lekarz }o--|{ specjalizacja
+pacjent }o--o{ alergia
 lekarz ||--o{ recepta
 recepta }o--|| pacjent
 recepta }o--|{ lek
-lek }o--o{ substancja
+lek }o--|{ substancja
 lek }o--|{ kategoria_lekow
 apteka ||--|| adres
 apteka ||--|| godziny_otwarcia
 aptekarz }o--o{ apteka
-alergia }o--o{ substancja
+alergia }o--|{ substancja
 
 
 @enduml
