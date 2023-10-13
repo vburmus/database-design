@@ -48,8 +48,7 @@ ___
 - Zapewnienie mechanizmu logowania użytkowników z różnymi poziomami dostępu.
 - Mechanizm przypisywania leków przez lekarzy.
 #### Nie należy uwzględniać:
-- Implementacji aplikacji
-- Projektowania interfejsów graficznych
+- Stany magazynowe
 ___
 ### Wymagania funkcjonalne
 #### 1. Pacjent
