@@ -16,7 +16,7 @@ rectangle "Substancja" as substancja {
 rectangle "Apteka" as apteka {
 }
 
-rectangle "Aptekarz" as aptekarz {
+rectangle "Farmaceuta" as aptekarz {
 }
 
 rectangle "Specjalizacja" as specjalizacja {
@@ -34,10 +34,6 @@ rectangle "Dawkowanie" as substancja {
 rectangle "Uzytkownik" as użytkownik {
 }
 
-
-rectangle "Godziny otwarcia" as godziny_otwarcia {
-}
-
 rectangle "Kategoria lekow" as kategoria_lekow {
 }
 
@@ -45,6 +41,9 @@ rectangle "Realizacja recepty" as realizacja_recepty{
 }
 
 rectangle "Wpis" as wpis{
+}
+
+rectangle "Postać farmaceutyczna" as postac_farmaceutyczna{
 }
 
 użytkownik ||--o| pacjent
@@ -59,9 +58,9 @@ recepta ||--|{ wpis
 wpis }o--|| lek
 lek }o--|{ substancja
 lek }o--|{ kategoria_lekow
-apteka ||--|{ godziny_otwarcia
 aptekarz }o--o{ apteka
 alergia }o--|{ substancja
-realizacja_recepty}o--||recepta
+realizacja_recepty}o--||wpis
 realizacja_recepty}o--||apteka
+lek }o--|{ postac_farmaceutyczna
 @enduml
