@@ -1,4 +1,4 @@
-@startuml diagram
+@startuml
 skinparam linetype ortho
 
 rectangle "Pacjent" as pacjent {
@@ -41,26 +41,27 @@ rectangle "Godziny otwarcia" as godziny_otwarcia {
 rectangle "Kategoria lekow" as kategoria_lekow {
 }
 
-rectangle "Adres" as adres {
+rectangle "Realizacja recepty" as realizacja_recepty{
 }
 
+rectangle "Wpis" as wpis{
+}
 
-apteka }o--o{ lek
 użytkownik ||--o| pacjent
 użytkownik ||--o| lekarz
 użytkownik ||--o| aptekarz
-apteka }o--o{ recepta
 lekarz }o--|{ specjalizacja
+kategoria_lekow}o--|{ specjalizacja
 pacjent }o--o{ alergia
 lekarz ||--o{ recepta
 recepta }o--|| pacjent
-recepta }o--|{ lek
+recepta ||--|{ wpis
+wpis }o--|| lek
 lek }o--|{ substancja
 lek }o--|{ kategoria_lekow
-apteka ||--|| adres
-apteka ||--|| godziny_otwarcia
+apteka ||--|{ godziny_otwarcia
 aptekarz }o--o{ apteka
 alergia }o--|{ substancja
-
-
+realizacja_recepty}o--||recepta
+realizacja_recepty}o--||apteka
 @enduml
