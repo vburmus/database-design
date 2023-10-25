@@ -1,45 +1,24 @@
--- MySQL Workbench Forward Engineering
-
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
-
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 USE `mydb` ;
 
--- -----------------------------------------------------
--- Table `mydb`.`pharmaceutical_form`
--- -----------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS `mydb`.`pharmaceutical_form` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  CHECK (LENGTH(`name`) > 0))
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`category`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`category` (
   `symbol` VARCHAR(1) NOT NULL,
   `description` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`symbol`),
   UNIQUE INDEX `name_UNIQUE` (`description` ASC) VISIBLE,
-  UNIQUE INDEX `id_UNIQUE` (`symbol` ASC) VISIBLE)
+  UNIQUE INDEX `id_UNIQUE` (`symbol` ASC) VISIBLE,
+  CHECK (LENGTH(`description`) > 0))
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`medicine`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`medicine` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `permit_number` VARCHAR(5) NOT NULL,
@@ -59,13 +38,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`medicine` (
     FOREIGN KEY (`category_symbol`)
     REFERENCES `mydb`.`category` (`symbol`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION,
+    CHECK (LENGTH(`name`) > 0),
+	CHECK (LENGTH(`permit_number`) > 0))
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`user`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`user` (
   `id` INT NOT NULL,
   `phone_number` VARCHAR(15) NULL,
@@ -75,13 +53,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`user` (
   `is_admin` TINYINT NULL,
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
+  CHECK (LENGTH(`email`) > 0),
+	CHECK (LENGTH(`login`) > 0),
+	CHECK (LENGTH(`password`) > 0))
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`doctor`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`doctor` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45) NOT NULL,
@@ -97,50 +75,44 @@ CREATE TABLE IF NOT EXISTS `mydb`.`doctor` (
     FOREIGN KEY (`user_id`)
     REFERENCES `mydb`.`user` (`id`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE,
+    CHECK (LENGTH(`first_name`) > 0),
+	CHECK (LENGTH(`last_name`) > 0),
+	CHECK (LENGTH(`pesel`) > 0),
+	CHECK (LENGTH(`pwz_number`) > 0))
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`specialization`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`specialization` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
+  CHECK (LENGTH(`name`) > 0))
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`substance`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`substance` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `source` ENUM("NATURAL", "SYNTHETIC") NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
+  CHECK (LENGTH(`name`) > 0))
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`allergy`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`allergy` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `description` VARCHAR(255) NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  CHECK (LENGTH(`name`) > 0))
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`patient`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`patient` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45) NOT NULL,
@@ -154,13 +126,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`patient` (
     FOREIGN KEY (`user_id`)
     REFERENCES `mydb`.`user` (`id`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE,
+    CHECK (LENGTH(`first_name`) > 0),
+	CHECK (LENGTH(`last_name`) > 0),
+	CHECK (LENGTH(`pesel`) > 0))
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`prescription`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`prescription` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `issue_date` DATETIME NOT NULL,
@@ -179,13 +150,11 @@ CREATE TABLE IF NOT EXISTS `mydb`.`prescription` (
     FOREIGN KEY (`doctor_id`)
     REFERENCES `mydb`.`doctor` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE,
+    CHECK (`issue_date` <= CURDATE()))
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`entry`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`entry` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `medicine_id` INT NOT NULL,
@@ -207,13 +176,11 @@ CREATE TABLE IF NOT EXISTS `mydb`.`entry` (
     FOREIGN KEY (`prescription_id`)
     REFERENCES `mydb`.`prescription` (`id`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE,
+    CHECK (`quantity` > 0), 
+CHECK (LENGTH(`dosage`) > 0))
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`medicine_substance`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`medicine_substance` (
   `substance_id` INT NOT NULL,
   `medicine_id` INT NOT NULL,
@@ -233,9 +200,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`medicine_substance` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`substance_allergy`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`substance_allergy` (
   `substance_id` INT NOT NULL,
   `allergy_id` INT NOT NULL,
@@ -254,32 +218,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`substance_allergy` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`kategoria_leku`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`kategoria_leku` (
-  `lek_id` INT NOT NULL,
-  `kategoria_leku` VARCHAR(1) NOT NULL,
-  PRIMARY KEY (`lek_id`, `kategoria_leku`),
-  INDEX `fk_lek_has_kategoria_leku_kategoria_leku1_idx` (`kategoria_leku` ASC) VISIBLE,
-  INDEX `fk_lek_has_kategoria_leku_lek1_idx` (`lek_id` ASC) VISIBLE,
-  CONSTRAINT `fk_lek_has_kategoria_leku_lek1`
-    FOREIGN KEY (`lek_id`)
-    REFERENCES `mydb`.`medicine` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_lek_has_kategoria_leku_kategoria_leku1`
-    FOREIGN KEY (`kategoria_leku`)
-    REFERENCES `mydb`.`category` (`symbol`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`doctor_specialization`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`doctor_specialization` (
   `doctor_id` INT NOT NULL,
   `specialization_id` INT NOT NULL,
@@ -299,9 +237,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`doctor_specialization` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`specialization_category`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`specialization_category` (
   `specialization_id` INT NOT NULL,
   `category_symbol` VARCHAR(1) NOT NULL,
@@ -321,9 +256,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`specialization_category` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`patient_allergy`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`patient_allergy` (
   `patient_id` INT NOT NULL,
   `allergy_id` INT NOT NULL,
@@ -343,9 +275,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`patient_allergy` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`pharmacy`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`pharmacy` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
@@ -353,13 +282,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`pharmacy` (
   `phone_number` VARCHAR(15) NULL,
   `permit_number` VARCHAR(15) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  CHECK (LENGTH(`name`) > 0),
+CHECK (LENGTH(`address`) > 0),
+CHECK (LENGTH(`permit_number`) > 0))
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`pharmacist`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`pharmacist` (
   `id` INT NOT NULL,
   `first_name` VARCHAR(45) NOT NULL,
@@ -373,13 +302,14 @@ CREATE TABLE IF NOT EXISTS `mydb`.`pharmacist` (
     FOREIGN KEY (`user_id`)
     REFERENCES `mydb`.`user` (`id`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE,
+    CHECK (LENGTH(`first_name`) > 0),
+	CHECK (LENGTH(`last_name`) > 0),
+	CHECK (LENGTH(`pesel`) > 0),
+	CHECK (LENGTH(`pwzf_number`) > 0))
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`pharmacy_pharmacist`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`pharmacy_pharmacist` (
   `pharmacy_id` INT NOT NULL,
   `pharmacist_id` INT NOT NULL,
@@ -399,9 +329,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`pharmacy_pharmacist` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`prescription_realization`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`prescription_realization` (
   `pharmacy_id` INT NOT NULL,
   `pharmacist_id` INT NOT NULL,
@@ -426,10 +353,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`prescription_realization` (
     FOREIGN KEY (`pharmacist_id`)
     REFERENCES `mydb`.`pharmacist` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE,
+    CHECK (`realized_quantity` >= 0))
 ENGINE = InnoDB;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
