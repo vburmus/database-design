@@ -1,8 +1,8 @@
-CREATE SCHEMA IF NOT EXISTS `dbproject` DEFAULT CHARACTER SET utf8 ;
-USE `dbproject` ;
+CREATE SCHEMA IF NOT EXISTS `online_prescription` DEFAULT CHARACTER SET utf8 ;
+USE `online_prescription` ;
 
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`pharmaceutical_form` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`pharmaceutical_form` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`pharmaceutical_form` (
   CHECK (LENGTH(`name`) > 0))
 ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`category` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`category` (
   `symbol` VARCHAR(1) NOT NULL,
   `description` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`symbol`),
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`category` (
   CHECK (LENGTH(`description`) > 0))
 ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`medicine` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`medicine` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `permit_number` VARCHAR(5) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
@@ -31,12 +31,12 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`medicine` (
   INDEX `fk_medicine_category1_idx` (`category_symbol` ASC) INVISIBLE,
   CONSTRAINT `fk_medicine_pharmaceutical_form`
     FOREIGN KEY (`pharmaceutical_form_id`)
-    REFERENCES `dbproject`.`pharmaceutical_form` (`id`)
+    REFERENCES `online_prescription`.`pharmaceutical_form` (`id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT `fk_medicine_category1`
     FOREIGN KEY (`category_symbol`)
-    REFERENCES `dbproject`.`category` (`symbol`)
+    REFERENCES `online_prescription`.`category` (`symbol`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
     CHECK (LENGTH(`name`) > 0),
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`medicine` (
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`user` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`user` (
   `id` INT NOT NULL,
   `phone_number` VARCHAR(15) NULL,
   `email` VARCHAR(255) NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`user` (
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`doctor` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`doctor` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`doctor` (
   INDEX `fk_doctor_user_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_doctor_user`
     FOREIGN KEY (`user_id`)
-    REFERENCES `dbproject`.`user` (`id`)
+    REFERENCES `online_prescription`.`user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
     CHECK (LENGTH(`first_name`) > 0),
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`doctor` (
 	CHECK (LENGTH(`pwz_number`) > 0))
 ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`specialization` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`specialization` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`specialization` (
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`substance` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`substance` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `source` ENUM("NATURAL", "SYNTHETIC") NOT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`substance` (
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`allergy` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`allergy` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `description` VARCHAR(255) NULL,
@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`allergy` (
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`patient` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`patient` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`patient` (
   INDEX `fk_patient_user_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_patient_user`
     FOREIGN KEY (`user_id`)
-    REFERENCES `dbproject`.`user` (`id`)
+    REFERENCES `online_prescription`.`user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
     CHECK (LENGTH(`first_name`) > 0),
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`patient` (
 	CHECK (LENGTH(`pesel`) = 11))
 ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`prescription` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`prescription` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `issue_date` DATETIME NOT NULL,
   `is_cancelled` TINYINT NULL,
@@ -145,18 +145,18 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`prescription` (
   INDEX `fk_recepta_lekarz1_idx` (`doctor_id` ASC) VISIBLE,
   CONSTRAINT `fk_recepta_pacjent1`
     FOREIGN KEY (`patient_id`)
-    REFERENCES `dbproject`.`patient` (`id`)
+    REFERENCES `online_prescription`.`patient` (`id`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE,
   CONSTRAINT `fk_recepta_lekarz1`
     FOREIGN KEY (`doctor_id`)
-    REFERENCES `dbproject`.`doctor` (`id`)
+    REFERENCES `online_prescription`.`doctor` (`id`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`entry` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`entry` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `medicine_id` INT NOT NULL,
   `prescription_id` INT NOT NULL,
@@ -170,19 +170,19 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`entry` (
   UNIQUE INDEX `medicine_id_UNIQUE` (`medicine_id` ASC) VISIBLE,
   CONSTRAINT `fk_entry_medicine`
     FOREIGN KEY (`medicine_id`)
-    REFERENCES `dbproject`.`medicine` (`id`)
+    REFERENCES `online_prescription`.`medicine` (`id`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT,
   CONSTRAINT `fk_entry_prescription`
     FOREIGN KEY (`prescription_id`)
-    REFERENCES `dbproject`.`prescription` (`id`)
+    REFERENCES `online_prescription`.`prescription` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
     CHECK (`quantity` > 0), 
 CHECK (LENGTH(`dosage`) > 0))
 ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`medicine_substance` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`medicine_substance` (
   `substance_id` INT NOT NULL,
   `medicine_id` INT NOT NULL,
   PRIMARY KEY (`substance_id`, `medicine_id`),
@@ -190,18 +190,18 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`medicine_substance` (
   INDEX `fk_medicine_substance_substance_idx` (`substance_id` ASC) VISIBLE,
   CONSTRAINT `fk_medicine_substance_substance`
     FOREIGN KEY (`substance_id`)
-    REFERENCES `dbproject`.`substance` (`id`)
+    REFERENCES `online_prescription`.`substance` (`id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT `fk_medicine_substance_medicine`
     FOREIGN KEY (`medicine_id`)
-    REFERENCES `dbproject`.`medicine` (`id`)
+    REFERENCES `online_prescription`.`medicine` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`substance_allergy` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`substance_allergy` (
   `substance_id` INT NOT NULL,
   `allergy_id` INT NOT NULL,
   PRIMARY KEY (`substance_id`, `allergy_id`),
@@ -209,17 +209,17 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`substance_allergy` (
   INDEX `fk_substance_allergy_substance_idx` (`substance_id` ASC) INVISIBLE,
   CONSTRAINT `fk_substance_allergy_substance`
     FOREIGN KEY (`substance_id`)
-    REFERENCES `dbproject`.`substance` (`id`)
+    REFERENCES `online_prescription`.`substance` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_substance_allergy_allergy`
     FOREIGN KEY (`allergy_id`)
-    REFERENCES `dbproject`.`allergy` (`id`)
+    REFERENCES `online_prescription`.`allergy` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`doctor_specialization` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`doctor_specialization` (
   `doctor_id` INT NOT NULL,
   `specialization_id` INT NOT NULL,
   PRIMARY KEY (`doctor_id`, `specialization_id`),
@@ -227,18 +227,18 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`doctor_specialization` (
   INDEX `fk_lekarz_has_specjalizacja_lekarz1_idx` (`doctor_id` ASC) VISIBLE,
   CONSTRAINT `fk_doctor_specialization_doctor`
     FOREIGN KEY (`doctor_id`)
-    REFERENCES `dbproject`.`doctor` (`id`)
+    REFERENCES `online_prescription`.`doctor` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_doctor_specialization_specialization`
     FOREIGN KEY (`specialization_id`)
-    REFERENCES `dbproject`.`specialization` (`id`)
+    REFERENCES `online_prescription`.`specialization` (`id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`specialization_category` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`specialization_category` (
   `specialization_id` INT NOT NULL,
   `category_symbol` VARCHAR(1) NOT NULL,
   INDEX `fk_specjalizacja_has_kategoria_kategoria1_idx` (`category_symbol` ASC) VISIBLE,
@@ -246,18 +246,18 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`specialization_category` (
   PRIMARY KEY (`specialization_id`, `category_symbol`),
   CONSTRAINT `fk_specialization_category_specialization`
     FOREIGN KEY (`specialization_id`)
-    REFERENCES `dbproject`.`specialization` (`id`)
+    REFERENCES `online_prescription`.`specialization` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_specialization_category_categoty`
     FOREIGN KEY (`category_symbol`)
-    REFERENCES `dbproject`.`category` (`symbol`)
+    REFERENCES `online_prescription`.`category` (`symbol`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`patient_allergy` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`patient_allergy` (
   `patient_id` INT NOT NULL,
   `allergy_id` INT NOT NULL,
   PRIMARY KEY (`patient_id`, `allergy_id`),
@@ -265,18 +265,18 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`patient_allergy` (
   INDEX `fk_patient_allergy_patient_idx` (`patient_id` ASC) VISIBLE,
   CONSTRAINT `fk_patient_allergy_patient`
     FOREIGN KEY (`patient_id`)
-    REFERENCES `dbproject`.`patient` (`id`)
+    REFERENCES `online_prescription`.`patient` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_patient_allergy_allergy`
     FOREIGN KEY (`allergy_id`)
-    REFERENCES `dbproject`.`allergy` (`id`)
+    REFERENCES `online_prescription`.`allergy` (`id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`pharmacy` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`pharmacy` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `address` VARCHAR(45) NOT NULL,
@@ -290,7 +290,7 @@ CHECK (LENGTH(`permit_number`) > 0))
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`pharmacist` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`pharmacist` (
   `id` INT NOT NULL,
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
@@ -301,7 +301,7 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`pharmacist` (
   INDEX `fk_pharmacist_user_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_pharmacist_user`
     FOREIGN KEY (`user_id`)
-    REFERENCES `dbproject`.`user` (`id`)
+    REFERENCES `online_prescription`.`user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
     CHECK (LENGTH(`first_name`) > 0),
@@ -312,7 +312,7 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`pharmacist` (
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`pharmacy_pharmacist` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`pharmacy_pharmacist` (
   `pharmacy_id` INT NOT NULL,
   `pharmacist_id` INT NOT NULL,
   PRIMARY KEY (`pharmacy_id`, `pharmacist_id`),
@@ -320,18 +320,18 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`pharmacy_pharmacist` (
   INDEX `fk_pharmacy_pharmacist_pharmacy_idx` (`pharmacy_id` ASC) VISIBLE,
   CONSTRAINT `fk_pharmacy_pharmacist_pharmacy`
     FOREIGN KEY (`pharmacy_id`)
-    REFERENCES `dbproject`.`pharmacy` (`id`)
+    REFERENCES `online_prescription`.`pharmacy` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_pharmacy_pharmacist_pharmacist`
     FOREIGN KEY (`pharmacist_id`)
-    REFERENCES `dbproject`.`pharmacist` (`id`)
+    REFERENCES `online_prescription`.`pharmacist` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `dbproject`.`prescription_realization` (
+CREATE TABLE IF NOT EXISTS `online_prescription`.`prescription_realization` (
   `pharmacy_id` INT NOT NULL,
   `pharmacist_id` INT NOT NULL,
   `entry_id` INT NOT NULL,
@@ -343,17 +343,17 @@ CREATE TABLE IF NOT EXISTS `dbproject`.`prescription_realization` (
   INDEX `fk_prescription_realization_pharmacist_idx` (`pharmacist_id` ASC) VISIBLE,
   CONSTRAINT `fk_prescription_realization_pharmacy`
     FOREIGN KEY (`pharmacy_id`)
-    REFERENCES `dbproject`.`pharmacy` (`id`)
+    REFERENCES `online_prescription`.`pharmacy` (`id`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE,
   CONSTRAINT `fk_prescription_realization_entry`
     FOREIGN KEY (`entry_id`)
-    REFERENCES `dbproject`.`entry` (`id`)
+    REFERENCES `online_prescription`.`entry` (`id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
   CONSTRAINT `fk_prescription_realization_pharmacist`
     FOREIGN KEY (`pharmacist_id`)
-    REFERENCES `dbproject`.`pharmacist` (`id`)
+    REFERENCES `online_prescription`.`pharmacist` (`id`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE,
     CHECK (`realized_quantity` >= 0))
