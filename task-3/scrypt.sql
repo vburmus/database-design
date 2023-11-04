@@ -45,7 +45,7 @@ ENGINE = InnoDB;
 
 
 CREATE TABLE IF NOT EXISTS `online_prescription`.`user` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `phone_number` VARCHAR(15) NULL,
   `email` VARCHAR(255) NOT NULL,
   `login` VARCHAR(45) NOT NULL,
@@ -291,7 +291,7 @@ ENGINE = InnoDB;
 
 
 CREATE TABLE IF NOT EXISTS `online_prescription`.`pharmacist` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
   `pesel` VARCHAR(11) NOT NULL,
