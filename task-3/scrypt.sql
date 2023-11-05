@@ -155,33 +155,6 @@ CREATE TABLE IF NOT EXISTS `online_prescription`.`prescription` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
-
-CREATE TABLE IF NOT EXISTS `online_prescription`.`entry` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `medicine_id` BIGINT NOT NULL,
-  `prescription_id` BIGINT NOT NULL,
-  `quantity` INT NOT NULL,
-  `dosage` VARCHAR(45) NOT NULL,
-  `annotation` VARCHAR(255) NULL,
-  PRIMARY KEY (`id`, `medicine_id`, `prescription_id`),
-  INDEX `fk_entry_prescription_idx` (`prescription_id` ASC) INVISIBLE,
-  INDEX `fk_entry_medicine_idx` (`medicine_id` ASC) INVISIBLE,
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
-  UNIQUE INDEX `medicine_id_UNIQUE` (`medicine_id` ASC) VISIBLE,
-  CONSTRAINT `fk_entry_medicine`
-    FOREIGN KEY (`medicine_id`)
-    REFERENCES `online_prescription`.`medicine` (`id`)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT,
-  CONSTRAINT `fk_entry_prescription`
-    FOREIGN KEY (`prescription_id`)
-    REFERENCES `online_prescription`.`prescription` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-    CHECK (`quantity` > 0), 
-CHECK (LENGTH(`dosage`) > 0))
-ENGINE = InnoDB;
-
 CREATE TABLE IF NOT EXISTS `online_prescription`.`medicine_substance` (
   `substance_id` BIGINT NOT NULL,
   `medicine_id` BIGINT NOT NULL,
@@ -311,6 +284,44 @@ CREATE TABLE IF NOT EXISTS `online_prescription`.`pharmacist` (
 	CHECK (LENGTH(`pwzf_number`) > 0))
 ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS `online_prescription`.`entry` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `medicine_id` BIGINT NOT NULL,
+  `prescription_id` BIGINT NOT NULL,
+  `quantity` INT NOT NULL,
+  `dosage` VARCHAR(45) NOT NULL,
+  `annotation` VARCHAR(255) NULL,
+  `status` ENUM("COMPLETED", "ORDERED", "CANCELLED") NOT NULL,
+  `pharmacy_id` BIGINT NOT NULL,
+  `pharmacist_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`, `medicine_id`, `prescription_id`, `pharmacy_id`, `pharmacist_id`),
+  INDEX `fk_entry_prescription_idx` (`prescription_id` ASC) INVISIBLE,
+  INDEX `fk_entry_medicine_idx` (`medicine_id` ASC) INVISIBLE,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  UNIQUE INDEX `medicine_id_UNIQUE` (`medicine_id` ASC) VISIBLE,
+  INDEX `fk_entry_pharmacy1_idx` (`pharmacy_id` ASC) VISIBLE,
+  INDEX `fk_entry_pharmacist1_idx` (`pharmacist_id` ASC) VISIBLE,
+  CONSTRAINT `fk_entry_medicine`
+    FOREIGN KEY (`medicine_id`)
+    REFERENCES `online_prescription`.`medicine` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
+  CONSTRAINT `fk_entry_prescription`
+    FOREIGN KEY (`prescription_id`)
+    REFERENCES `online_prescription`.`prescription` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_entry_pharmacy1`
+    FOREIGN KEY (`pharmacy_id`)
+    REFERENCES `online_prescription`.`pharmacy` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_entry_pharmacist1`
+    FOREIGN KEY (`pharmacist_id`)
+    REFERENCES `online_prescription`.`pharmacist` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `online_prescription`.`pharmacy_pharmacist` (
   `pharmacy_id` BIGINT NOT NULL,
@@ -328,33 +339,4 @@ CREATE TABLE IF NOT EXISTS `online_prescription`.`pharmacy_pharmacist` (
     REFERENCES `online_prescription`.`pharmacist` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-
-CREATE TABLE IF NOT EXISTS `online_prescription`.`prescription_realization` (
-  `pharmacy_id` BIGINT NOT NULL,
-  `pharmacist_id` BIGINT NOT NULL,
-  `entry_id` BIGINT NOT NULL,
-  `status` ENUM("COMPLETED", "ORDERED", "CANCELLED") NOT NULL,
-  `realized_quantity` INT NOT NULL,
-  PRIMARY KEY (`pharmacy_id`, `pharmacist_id`, `entry_id`),
-  INDEX `fk_prescription_realization_entry_idx` (`entry_id` ASC) VISIBLE,
-  INDEX `fk_prescription_realization_pharmacy_idx` (`pharmacy_id` ASC) VISIBLE,
-  INDEX `fk_prescription_realization_pharmacist_idx` (`pharmacist_id` ASC) VISIBLE,
-  CONSTRAINT `fk_prescription_realization_pharmacy`
-    FOREIGN KEY (`pharmacy_id`)
-    REFERENCES `online_prescription`.`pharmacy` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_prescription_realization_entry`
-    FOREIGN KEY (`entry_id`)
-    REFERENCES `online_prescription`.`entry` (`id`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_prescription_realization_pharmacist`
-    FOREIGN KEY (`pharmacist_id`)
-    REFERENCES `online_prescription`.`pharmacist` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE,
-    CHECK (`realized_quantity` >= 0))
 ENGINE = InnoDB;
