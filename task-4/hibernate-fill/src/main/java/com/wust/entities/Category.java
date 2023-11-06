@@ -1,9 +1,6 @@
 package com.wust.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
@@ -15,11 +12,14 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "category")
 public class Category {
     @Id
     private String symbol;
     private String description;
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany
+    @JoinTable(name = "specialization_category", joinColumns = @JoinColumn(name = "category_symbol"),
+            inverseJoinColumns = @JoinColumn(name = "specialization_id"))
     @ToString.Exclude
     private Set<Specialization> specializationSet;
     @OneToMany(mappedBy = "category")
