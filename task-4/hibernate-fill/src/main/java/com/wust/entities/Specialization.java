@@ -18,7 +18,9 @@ public class Specialization {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToMany(mappedBy = "specializationSet")
+    @ManyToMany
+    @JoinTable(name = "specialization_category", joinColumns = @JoinColumn(name = "specialization_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_symbol"))
     @ToString.Exclude
     private Set<Category> categories;
     @ManyToMany(mappedBy = "specializations")
