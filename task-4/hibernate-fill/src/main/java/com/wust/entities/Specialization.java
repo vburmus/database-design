@@ -12,14 +12,13 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "specialization")
 public class Specialization {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String name;
-    @ManyToMany
-    @JoinTable(name = "specialization_category", joinColumns = @JoinColumn(name = "specialization_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_symbol"))
+    @ManyToMany(mappedBy = "specializationSet")
     @ToString.Exclude
     private Set<Category> categories;
     @ManyToMany(mappedBy = "specializations")

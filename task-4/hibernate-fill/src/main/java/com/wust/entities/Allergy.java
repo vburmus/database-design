@@ -12,6 +12,7 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "allergy")
 public class Allergy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
