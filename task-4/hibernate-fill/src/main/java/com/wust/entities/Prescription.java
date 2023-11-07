@@ -17,9 +17,7 @@ public class Prescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "issue_date")
     private LocalDateTime issueDate;
-    @Column(name = "is_cancelled")
     private Boolean isCancelled;
     @ManyToOne
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")

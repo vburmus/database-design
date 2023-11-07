@@ -12,14 +12,11 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "patient")
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "first_name")
     private String firstName;
-    @Column(name = "last_name")
     private String lastName;
     private String pesel;
     @OneToOne
@@ -29,7 +26,7 @@ public class Patient {
     @JoinTable(name = "patient_allergy", joinColumns = @JoinColumn(name = "patient_id"),
             inverseJoinColumns = @JoinColumn(name = "allergy_id"))
     @ToString.Exclude
-    private Set<Allergy> allergySet;
+    private Set<Allergy> allergies;
     @OneToMany(mappedBy = "patient")
     @ToString.Exclude
     private Set<Prescription> prescriptions;

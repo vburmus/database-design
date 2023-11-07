@@ -23,7 +23,7 @@ public class Substance {
     @JoinTable(name = "substance_allergy", joinColumns = @JoinColumn(name = "substance_id"),
             inverseJoinColumns = @JoinColumn(name = "allergy_id"))
     @ToString.Exclude
-    private Set<Allergy> allergySet;
+    private Set<Allergy> allergies;
     @ManyToMany(mappedBy = "substances")
     @ToString.Exclude
     private Set<Medicine> medicines;

@@ -12,14 +12,13 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "allergy")
 public class Allergy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
-    @ManyToMany(mappedBy = "allergySet")
+    @ManyToMany(mappedBy = "allergies")
     @ToString.Exclude
     private Set<Substance> substances;
 }

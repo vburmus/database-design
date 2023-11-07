@@ -12,7 +12,6 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "category")
 public class Category {
     @Id
     private String symbol;
@@ -21,7 +20,7 @@ public class Category {
     @JoinTable(name = "specialization_category", joinColumns = @JoinColumn(name = "category_symbol"),
             inverseJoinColumns = @JoinColumn(name = "specialization_id"))
     @ToString.Exclude
-    private Set<Specialization> specializationSet;
+    private Set<Specialization> specializations;
     @OneToMany(mappedBy = "category")
     @ToString.Exclude
     private Set<Medicine> medicines;
