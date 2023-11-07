@@ -15,11 +15,16 @@ public class Main {
     private static final EntityManager EM = EMF.createEntityManager();
 
     private static final int SPECIALIZATIONS_AMOUNT = 41;
+    // !Users = doctors + patients + pharmacists!
     private static final int USERS_AMOUNT = 10_000;
     private static final int DOCTORS_AMOUNT = 3_000;
+    private static final int PATIENTS_AMOUNT = 4_000;
+    private static final int PHARMACISTS_AMOUNT = 3_000;
+    private static final int PHARMACIES_AMOUNT = 600;
     private static final int ALLERGIES_AMOUNT = 100;
     private static final int CATEGORIES_AMOUNT = 14;
-    private static final int PATIENTS_AMOUNT = 4_000;
+    private static final int PHARMACEUTICAL_FORMS_AMOUNT = 100;
+    private static final int SUBSTANCES_AMOUNT = 5_000;
 
     private static final Random RANDOM = new Random();
 
@@ -28,13 +33,16 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-            clearDB();
             initSpecializations();
             initUsers();
             initDoctors();
             initAllergies();
             initCategories();
             initPatients();
+            initPharmaceuticalForms();
+            initSubstances();
+            initPharmacists();
+            initPharmacies();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -229,6 +237,79 @@ public class Main {
         transaction.commit();
     }
 
+    private static void initPharmaceuticalForms() {
+        EntityTransaction transaction = EM.getTransaction();
+        transaction.begin();
+
+        for (int i = 0; i < PHARMACEUTICAL_FORMS_AMOUNT; i++) {
+            PharmaceuticalForm phf = new PharmaceuticalForm();
+            phf.setName("Form" + (i+1));
+            EM.persist(phf);
+        }
+
+        transaction.commit();
+    }
+
+    private static void initSubstances() {
+        EntityTransaction transaction = EM.getTransaction();
+        transaction.begin();
+
+        for (int i = 0; i < SUBSTANCES_AMOUNT; i++) {
+            Substance substance = new Substance();
+            substance.setName("C" + (i+1) + "H" + (i));
+
+            Set<Allergy> allergies = getRandomAllergies(3);
+            if (!allergies.isEmpty()) {
+                substance.setAllergySet(allergies);
+            }
+
+            substance.setSource(getRandomSource());
+            EM.persist(substance);
+        }
+
+        transaction.commit();
+    }
+
+    private static void initPharmacists() {
+        EntityTransaction transaction = EM.getTransaction();
+        transaction.begin();
+
+        for (int i = 0; i < PHARMACISTS_AMOUNT; i++) {
+            Pharmacist pharmacist = new Pharmacist();
+
+            pharmacist.setFirstName("PharmacistName" + (i+1));
+            pharmacist.setLastName("PharmacistSurname" + (i+1));
+            pharmacist.setPwzfNumber(String.format("%07d", (i+1)));
+
+            User user = getRandomUser();
+            pharmacist.setUser(user);
+            pharmacist.setPesel(String.format("%011d", user.getId()));
+
+            EM.persist(pharmacist);
+        }
+
+        transaction.commit();
+    }
+
+    private static void initPharmacies() {
+        EntityTransaction transaction = EM.getTransaction();
+        transaction.begin();
+
+        for (int i = 0; i < PHARMACIES_AMOUNT; i++) {
+            Pharmacy pharmacy = new Pharmacy();
+
+            pharmacy.setName("Pharmacy" + (i+1));
+            pharmacy.setAddress("Street " + getRandomString(10) + " Nr " + (i+1));
+            pharmacy.setPhoneNumber("+48" + RANDOM.nextInt(999_999_999 - 100_100_100 + 1));
+            pharmacy.setPermitNumber(String.format("%011d", (i+1)));
+            pharmacy.setPharmacists(getRandomPharmacists(null));
+
+            EM.persist(pharmacy);
+        }
+
+        transaction.commit();
+    }
+
     private static User getRandomUser() {
         User user = EM.find(User.class, RANDOM.nextInt(USERS_AMOUNT) + 1);
         while (USED_USERS.contains(user)) {
@@ -271,15 +352,41 @@ public class Main {
         return allergies;
     }
 
-    private static void clearDB() {
-        EntityTransaction transaction = EM.getTransaction();
-        transaction.begin();
+    private static Set<Pharmacist> getRandomPharmacists(Integer max) {
+        Set<Pharmacist> pharmacists = new HashSet<>();
 
-        EM.createNativeQuery("DELETE FROM specialization").executeUpdate();
-        EM.createNativeQuery("DELETE FROM user").executeUpdate();
-        EM.createNativeQuery("DELETE FROM doctor").executeUpdate();
-        EM.createNativeQuery("DELETE FROM allergy").executeUpdate();
+        if (max == null) {
+            max = RANDOM.nextInt(5) + 1;
+        }
+        for (int i = 0; i < max; i++) {
+            int randomPharmacistId = RANDOM.nextInt(PHARMACISTS_AMOUNT) + 1;
+            Pharmacist pharmacist = EM.find(Pharmacist.class, randomPharmacistId);
+            pharmacists.add(pharmacist);
+        }
 
-        transaction.commit();
+        return pharmacists;
+    }
+
+    private static Source getRandomSource() {
+        int randomNumber = RANDOM.nextInt(2) + 1;
+
+        if (randomNumber == 1) {
+            return Source.NATURAL;
+        } else {
+            return Source.SYNTHETIC;
+        }
+    }
+
+    private static String getRandomString(int max) {
+        String validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        StringBuilder randomString = new StringBuilder();
+
+        for (int i = 0; i < max; i++) {
+            int randomIndex = RANDOM.nextInt(validChars.length());
+            char randomChar = validChars.charAt(randomIndex);
+            randomString.append(randomChar);
+        }
+
+        return  randomString.toString();
     }
 }
