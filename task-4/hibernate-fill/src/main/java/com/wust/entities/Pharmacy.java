@@ -18,9 +18,7 @@ public class Pharmacy {
     private Long id;
     private String name;
     private String address;
-    @Column(name = "phone_number")
     private String phoneNumber;
-    @Column(name = "permit_number")
     private String permitNumber;
     @ManyToMany
     @JoinTable(name = "pharmacy_pharmacist", joinColumns = @JoinColumn(name = "pharmacy_id"),

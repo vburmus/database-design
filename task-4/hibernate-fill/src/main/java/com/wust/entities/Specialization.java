@@ -12,7 +12,6 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "specialization")
 public class Specialization {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

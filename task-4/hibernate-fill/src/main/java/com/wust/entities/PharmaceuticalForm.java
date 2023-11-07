@@ -10,7 +10,6 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "pharmaceutical_form")
 public class PharmaceuticalForm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -16,7 +16,6 @@ public class Medicine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "permit_number")
     private String permitNumber;
     private String name;
     @OneToOne
