@@ -15,7 +15,9 @@ import java.util.Set;
 public class Specialization {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true)
     private Long id;
+    @Column(nullable = false, length = 45)
     private String name;
     @ManyToMany
     @JoinTable(name = "specialization_category", joinColumns = @JoinColumn(name = "specialization_id"),
