@@ -2,8 +2,9 @@ package com.wust.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -16,17 +17,21 @@ import java.util.Set;
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true)
     private Long id;
+    @Column(nullable = false, length = 45)
     private String firstName;
+    @Column(nullable = false, length = 45)
     private String lastName;
+    @Column(nullable = false, length = 11)
     private String pesel;
+    @Column(nullable = false, length = 7)
     private String pwzNumber;
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
-    @ManyToMany
-    @JoinTable(name = "doctor_specialization",
-            joinColumns = @JoinColumn(name = "doctor_id"),
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "doctor_specialization", joinColumns = @JoinColumn(name = "doctor_id"),
             inverseJoinColumns = @JoinColumn(name = "specialization_id"))
     @ToString.Exclude
     private Set<Specialization> specializations;
@@ -39,15 +44,15 @@ public class Doctor {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Doctor that = (Doctor) o;
-        return Objects.equals(id, that.id) && Objects.equals(firstName, that.firstName) &&
-                Objects.equals(lastName, that.lastName) && Objects.equals(pesel, that.pesel) &&
-                Objects.equals(pwzNumber, that.pwzNumber);
+        Doctor doctor = (Doctor) o;
+        return new EqualsBuilder().append(id, doctor.id).append(firstName, doctor.firstName).append(lastName,
+                doctor.lastName).append(pesel, doctor.pesel).append(pwzNumber, doctor.pwzNumber).append(user,
+                doctor.user).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), id, firstName, lastName, pesel, pwzNumber);
+        return new HashCodeBuilder(17, 37)
+                .append(id).append(firstName).append(lastName).append(pesel).append(pwzNumber).append(user).toHashCode();
     }
 }
