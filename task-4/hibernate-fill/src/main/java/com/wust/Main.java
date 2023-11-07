@@ -130,85 +130,85 @@ public class Main {
         Category cat1 = new Category();
         cat1.setSymbol("A");
         cat1.setDescription("Alimentary tract and metabolism");
-        cat1.setSpecializationSet(getRandomSpecializations(5));
+        cat1.setSpecializations(getRandomSpecializations(5));
         EM.persist(cat1);
 
         Category cat2 = new Category();
         cat2.setSymbol("B");
         cat2.setDescription("Blood and blood forming organs");
-        cat2.setSpecializationSet(getRandomSpecializations(5));
+        cat2.setSpecializations(getRandomSpecializations(5));
         EM.persist(cat2);
 
         Category cat3 = new Category();
         cat3.setSymbol("C");
         cat3.setDescription("Cardiovascular system");
-        cat3.setSpecializationSet(getRandomSpecializations(5));
+        cat3.setSpecializations(getRandomSpecializations(5));
         EM.persist(cat3);
 
         Category cat4 = new Category();
         cat4.setSymbol("D");
         cat4.setDescription("Dermatologicals");
-        cat4.setSpecializationSet(getRandomSpecializations(5));
+        cat4.setSpecializations(getRandomSpecializations(5));
         EM.persist(cat4);
 
         Category cat5 = new Category();
         cat5.setSymbol("G");
         cat5.setDescription("Genito-urinary system and sex hormones");
-        cat5.setSpecializationSet(getRandomSpecializations(5));
+        cat5.setSpecializations(getRandomSpecializations(5));
         EM.persist(cat5);
 
         Category cat6 = new Category();
         cat6.setSymbol("H");
         cat6.setDescription("Systemic hormonal preparations, excluding sex hormones and insulins");
-        cat6.setSpecializationSet(getRandomSpecializations(5));
+        cat6.setSpecializations(getRandomSpecializations(5));
         EM.persist(cat6);
 
         Category cat7 = new Category();
         cat7.setSymbol("J");
         cat7.setDescription("Antiinfectives for systemic use");
-        cat7.setSpecializationSet(getRandomSpecializations(5));
+        cat7.setSpecializations(getRandomSpecializations(5));
         EM.persist(cat7);
 
         Category cat8 = new Category();
         cat8.setSymbol("L");
         cat8.setDescription("Antineoplastic and immunomodulating agents");
-        cat8.setSpecializationSet(getRandomSpecializations(5));
+        cat8.setSpecializations(getRandomSpecializations(5));
         EM.persist(cat8);
 
         Category cat9 = new Category();
         cat9.setSymbol("M");
         cat9.setDescription("Musculo-skeletal system");
-        cat9.setSpecializationSet(getRandomSpecializations(5));
+        cat9.setSpecializations(getRandomSpecializations(5));
         EM.persist(cat9);
 
         Category cat10 = new Category();
         cat10.setSymbol("N");
         cat10.setDescription("Nervous system");
-        cat10.setSpecializationSet(getRandomSpecializations(5));
+        cat10.setSpecializations(getRandomSpecializations(5));
         EM.persist(cat10);
 
         Category cat11 = new Category();
         cat11.setSymbol("P");
         cat11.setDescription("Antiparasitic products, insecticides and repellents");
-        cat11.setSpecializationSet(getRandomSpecializations(5));
+        cat11.setSpecializations(getRandomSpecializations(5));
         EM.persist(cat11);
 
         Category cat12 = new Category();
         cat12.setSymbol("R");
         cat12.setDescription("Respiratory system");
-        cat12.setSpecializationSet(getRandomSpecializations(5));
+        cat12.setSpecializations(getRandomSpecializations(5));
         EM.persist(cat12);
 
         Category cat13 = new Category();
         cat13.setSymbol("S");
         cat13.setDescription("Sensory organs");
-        cat13.setSpecializationSet(getRandomSpecializations(5));
+        cat13.setSpecializations(getRandomSpecializations(5));
         EM.persist(cat13);
 
         Category cat14 = new Category();
         cat14.setSymbol("V");
         cat14.setDescription("Various");
-        cat14.setSpecializationSet(getRandomSpecializations(5));
+        cat14.setSpecializations(getRandomSpecializations(5));
         EM.persist(cat14);
 
 
@@ -229,7 +229,7 @@ public class Main {
             patient.setUser(user);
             patient.setPesel(String.format("%011d", user.getId()));
 
-            patient.setAllergySet(getRandomAllergies(5));
+            patient.setAllergies(getRandomAllergies(5));
 
             EM.persist(patient);
         }
