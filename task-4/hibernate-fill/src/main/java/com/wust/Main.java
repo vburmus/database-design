@@ -260,7 +260,7 @@ public class Main {
 
             Set<Allergy> allergies = getRandomAllergies(3);
             if (!allergies.isEmpty()) {
-                substance.setAllergySet(allergies);
+                substance.setAllergies(allergies);
             }
 
             substance.setSource(getRandomSource());
