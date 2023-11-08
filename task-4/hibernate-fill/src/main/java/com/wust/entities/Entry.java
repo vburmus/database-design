@@ -33,7 +33,7 @@ public class Entry {
     @ManyToOne
     @JoinColumn(name = "pharmacist_id", referencedColumnName = "id")
     private Pharmacist pharmacist;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Override
