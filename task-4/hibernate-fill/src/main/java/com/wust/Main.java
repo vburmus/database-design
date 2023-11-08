@@ -7,15 +7,13 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
-import lombok.ToString;
-import lombok.val;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import net.datafaker.Faker;
 
@@ -24,8 +22,7 @@ public class Main {
     private static final EntityManager EM = EMF.createEntityManager();
 
     private static final int SPECIALIZATIONS_AMOUNT = 41;
-    // !Users = doctors + patients + pharmacists!
-    private static final int USERS_AMOUNT = 10_000;
+
     private static final int DOCTORS_AMOUNT = 5_000;
     private static final int PATIENTS_AMOUNT = 4_000;
     private static final int PHARMACISTS_AMOUNT = 3_000;
@@ -41,11 +38,11 @@ public class Main {
     private static final Set<String> EMAILS = new HashSet<>();
     private static final Set<String> LOGINS = new HashSet<>();
     private static final Set<String> ALLERGIES = new HashSet<>();
-    private static final Set<String> SUBSTANCIES = new HashSet<>();
+    private static final Set<String> SUBSTANCES = new HashSet<>();
     private static final Set<String> PERMIT_NUMBERS = new HashSet<>();
     private static final Set<String> PHARMACIES_NAMES = new HashSet<>();
     private static final Category[] CATEGORIES = new Category[14];
-    private static final Faker faker = new Faker(new Locale("pl"));
+    private static final Faker FAKER = new Faker(new Locale("pl"));
 
     public static void main(String[] args) {
 
@@ -76,7 +73,7 @@ public class Main {
 
         for (int i = 0; i < SPECIALIZATIONS_AMOUNT; i++) {
             Specialization spec = new Specialization();
-            spec.setName("specialization" + (i + 1));
+            spec.setName(FAKER.medical().symptoms() + (i+1));
             EM.persist(spec);
         }
 
@@ -86,17 +83,17 @@ public class Main {
     private static User generateUser() {
         User user = new User();
 
-        user.setPhoneNumber(faker.phoneNumber().cellPhone());
-        user.setEmail(faker.internet().emailAddress());
+        user.setPhoneNumber(FAKER.phoneNumber().cellPhone());
+        user.setEmail(FAKER.internet().emailAddress());
         while (EMAILS.contains(user.getEmail())) {
-            user.setEmail(faker.internet().emailAddress());
+            user.setEmail(FAKER.internet().emailAddress());
         }
         EMAILS.add(user.getEmail());
-        user.setLogin(faker.name().username());
+        user.setLogin(FAKER.name().username());
         while (LOGINS.contains(user.getLogin())) {
-            user.setLogin(faker.name().username());
+            user.setLogin(FAKER.name().username());
         }
-        user.setPassword(faker.internet().password());
+        user.setPassword(FAKER.internet().password());
         user.setIsAdmin(false);
         EM.persist(user);
 
@@ -110,13 +107,13 @@ public class Main {
         for (int i = 0; i < DOCTORS_AMOUNT; i++) {
             Doctor doc = new Doctor();
 
-            doc.setFirstName(faker.name().firstName());
-            doc.setLastName(faker.name().lastName());
+            doc.setFirstName(FAKER.name().firstName());
+            doc.setLastName(FAKER.name().lastName());
             doc.setPwzNumber(String.format("%07d", (i + 1)));
 
             User user = generateUser();
             doc.setUser(user);
-            doc.setPesel(faker.idNumber().peselNumber());
+            doc.setPesel(FAKER.idNumber().peselNumber());
 
             doc.setSpecializations(getRandomSpecializations(null));
 
@@ -133,10 +130,10 @@ public class Main {
         for (int i = 0; i < ALLERGIES_AMOUNT; i++) {
             Allergy allergy = new Allergy();
 
-            allergy.setName(faker.disease().dermatology());
+            allergy.setName(FAKER.disease().dermatology());
             int max = 10;
             while (ALLERGIES.contains(allergy.getName())) {
-                allergy.setName(faker.disease().dermatology());
+                allergy.setName(FAKER.disease().dermatology());
                 max--;
                 if (max == 0) {
                     allergy.setName(getRandomString(10));
@@ -144,7 +141,7 @@ public class Main {
                 }
             }
             ALLERGIES.add(allergy.getName());
-            allergy.setDescription("Allergy has " + (i + 1) + " level of danger");
+            allergy.setDescription(FAKER.lorem().fixedString(100));
             EM.persist(allergy);
         }
 
@@ -263,12 +260,12 @@ public class Main {
         for (int i = 0; i < PATIENTS_AMOUNT; i++) {
             Patient patient = new Patient();
 
-            patient.setFirstName(faker.name().firstName());
-            patient.setLastName(faker.name().lastName());
+            patient.setFirstName(FAKER.name().firstName());
+            patient.setLastName(FAKER.name().lastName());
 
             User user = generateUser();
             patient.setUser(user);
-            patient.setPesel(faker.idNumber().peselNumber());
+            patient.setPesel(FAKER.idNumber().peselNumber());
 
             patient.setAllergies(getRandomAllergies(5));
 
@@ -284,7 +281,7 @@ public class Main {
 
         for (int i = 0; i < PHARMACEUTICAL_FORMS_AMOUNT; i++) {
             PharmaceuticalForm phf = new PharmaceuticalForm();
-            phf.setName("Form" + (i + 1));
+            phf.setName(FAKER.lorem().word() + (i+1));
             EM.persist(phf);
         }
 
@@ -297,17 +294,17 @@ public class Main {
 
         for (int i = 0; i < SUBSTANCES_AMOUNT; i++) {
             Substance substance = new Substance();
-            substance.setName(faker.food().ingredient());
+            substance.setName(getRandomString(10) + (i+1));
             int max = 10;
-            while (SUBSTANCIES.contains(substance.getName())) {
-                substance.setName(faker.food().ingredient());
+            while (SUBSTANCES.contains(substance.getName())) {
+                substance.setName(FAKER.food().ingredient());
                 max--;
                 if (max == 0) {
                     substance.setName(getRandomString(10));
                     break;
                 }
             }
-            SUBSTANCIES.add(substance.getName());
+            SUBSTANCES.add(substance.getName());
             Set<Allergy> allergies = getRandomAllergies(3);
             if (!allergies.isEmpty()) {
                 substance.setAllergies(allergies);
@@ -327,13 +324,13 @@ public class Main {
         for (int i = 0; i < PHARMACISTS_AMOUNT; i++) {
             Pharmacist pharmacist = new Pharmacist();
 
-            pharmacist.setFirstName(faker.name().firstName());
-            pharmacist.setLastName(faker.name().lastName());
+            pharmacist.setFirstName(FAKER.name().firstName());
+            pharmacist.setLastName(FAKER.name().lastName());
             pharmacist.setPwzfNumber(String.format("%07d", (i + 1)));
 
             User user = generateUser();
             pharmacist.setUser(user);
-            pharmacist.setPesel(faker.idNumber().peselNumber());
+            pharmacist.setPesel(FAKER.idNumber().peselNumber());
 
             EM.persist(pharmacist);
         }
@@ -348,11 +345,11 @@ public class Main {
         for (int i = 0; i < PHARMACIES_AMOUNT; i++) {
             Pharmacy pharmacy = new Pharmacy();
 
-            pharmacy.setName(faker.company().name());
-            pharmacy.setAddress(faker.address().streetAddress() + " " + faker.address().buildingNumber());
-            pharmacy.setPhoneNumber(faker.phoneNumber().phoneNumber());
+            pharmacy.setName(FAKER.company().name());
+            pharmacy.setAddress(FAKER.address().streetAddress() + " " + FAKER.address().buildingNumber());
+            pharmacy.setPhoneNumber(FAKER.phoneNumber().phoneNumber());
             pharmacy.setPermitNumber(String.format("%011d", (i + 1)));
-            pharmacy.setPharmacists(getRandomPharmacists(null));
+            pharmacy.setPharmacists(getRandomPharmacists());
 
             EM.persist(pharmacy);
         }
@@ -367,14 +364,9 @@ public class Main {
         for (int i = 0; i < MEDICINES_AMOUNT; i++) {
             Medicine medicine = new Medicine();
 
-            medicine.setName(faker.medical().medicineName());
-            int max = 10;
+            medicine.setName(FAKER.medical().medicineName());
             while (PHARMACIES_NAMES.contains(medicine.getName())) {
-                medicine.setName(faker.medical().medicineName());
-                if (max == 0) {
-                    medicine.setName(getRandomString(10));
-                    break;
-                }
+                medicine.setName(FAKER.medical().medicineName());
             }
             medicine.setPermitNumber(getRandomString(5));
             while (PERMIT_NUMBERS.contains(medicine.getPermitNumber())) {
@@ -383,7 +375,7 @@ public class Main {
             medicine.setPharmaceuticalForm(
                     EM.find(PharmaceuticalForm.class, RANDOM.nextInt(PHARMACEUTICAL_FORMS_AMOUNT) + 1));
             medicine.setCategory(CATEGORIES[RANDOM.nextInt(CATEGORIES.length)]);
-            medicine.setSubstances(getRandomSubstances(null));
+            medicine.setSubstances(getRandomSubstances());
 
             EM.persist(medicine);
         }
@@ -397,23 +389,22 @@ public class Main {
 
         for (int i = 0; i < PRESCRIPTIONS_AMOUNT; i++) {
             Prescription prescription = new Prescription();
-
             prescription.setDoctor(EM.find(Doctor.class, RANDOM.nextInt(DOCTORS_AMOUNT) + 1));
             prescription.setPatient(EM.find(Patient.class, RANDOM.nextInt(PATIENTS_AMOUNT) + 1));
-            prescription.setIssueDate(new Timestamp(faker.date().birthday(0, 100).getTime()).toLocalDateTime());
-            prescription.setIsCancelled(faker.number().numberBetween(1, 100) > 90);
+            prescription.setIssueDate(new Timestamp(FAKER.date().birthday(0, 100).getTime()).toLocalDateTime());
+            prescription.setIsCancelled(FAKER.number().numberBetween(1, 100) > 90);
             EM.persist(prescription);
-            prescription.setEntries(generateEntries(RANDOM.nextInt(10) + 1, prescription, prescription.getIsCancelled()));
+            prescription.setEntries(generateEntries(RANDOM.nextInt(10) + 1, prescription));
             EM.merge(prescription);
         }
 
         transaction.commit();
     }
 
-    private static Set<Entry> generateEntries(int how_many, Prescription prescription, Boolean isCancelled) {
+    private static Set<Entry> generateEntries(int max, Prescription prescription) {
         Set<Entry> entries = new HashSet<>();
         Set<Medicine> medicines = new HashSet<>();
-        for (int i = 0; i < how_many; i++) {
+        for (int i = 0; i < max; i++) {
             Entry entry = new Entry();
             entry.setMedicine(EM.find(Medicine.class, RANDOM.nextInt(MEDICINES_AMOUNT) + 1));
             while (medicines.contains(entry.getMedicine())) {
@@ -423,16 +414,17 @@ public class Main {
             entry.setPrescription(prescription);
             entry.setEntryPK(new EntryPK(entry.getMedicine().getId(), prescription.getId()));
             entry.setQuantity(RANDOM.nextInt(10) + 1);
-            entry.setDosage(String.valueOf(RANDOM.nextInt(10) + 1) + " ml/" + String.valueOf(RANDOM.nextInt(7) + 1));
-            if(isCancelled) {
+            entry.setDosage((RANDOM.nextInt(10) + 1) + " ml/" + (RANDOM.nextInt(7) + 1));
+
+            if(Boolean.TRUE.equals(prescription.getIsCancelled())) {
                 entry.setStatus(Status.CANCELED);
             } else {
                 entry.setStatus(Status.values()[RANDOM.nextInt(Status.values().length-1)]);
             }
-            entry.setStatus(Status.values()[RANDOM.nextInt(Status.values().length)]);
+
             entry.setPharmacy(EM.find(Pharmacy.class, RANDOM.nextInt(PHARMACIES_AMOUNT) + 1));
             entry.setPharmacist(getPharmacistFromPharmacy(entry.getPharmacy()));
-            String annotation = faker.lorem().paragraph();
+            String annotation = FAKER.lorem().paragraph();
             if (annotation.length() > 100) {
                 annotation = annotation.substring(0, 100);
             }
@@ -482,12 +474,10 @@ public class Main {
         return allergies;
     }
 
-    private static Set<Pharmacist> getRandomPharmacists(Integer max) {
+    private static Set<Pharmacist> getRandomPharmacists() {
         Set<Pharmacist> pharmacists = new HashSet<>();
+        int max = RANDOM.nextInt(5) + 1;
 
-        if (max == null) {
-            max = RANDOM.nextInt(5) + 1;
-        }
         for (int i = 0; i < max; i++) {
             int randomPharmacistId = RANDOM.nextInt(PHARMACISTS_AMOUNT) + 1;
             Pharmacist pharmacist = EM.find(Pharmacist.class, randomPharmacistId);
@@ -497,12 +487,11 @@ public class Main {
         return pharmacists;
     }
 
-    private static Set<Substance> getRandomSubstances(Integer max) {
+    private static Set<Substance> getRandomSubstances() {
         Set<Substance> substances = new HashSet<>();
 
-        if (max == null) {
-            max = RANDOM.nextInt(5) + 1;
-        }
+        int max = RANDOM.nextInt(5) + 1;
+
         for (int i = 0; i < max; i++) {
             int randomSubstanceId = RANDOM.nextInt(SUBSTANCES_AMOUNT) + 1;
             Substance substance = EM.find(Substance.class, randomSubstanceId);
