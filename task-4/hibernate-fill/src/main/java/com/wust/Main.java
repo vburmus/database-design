@@ -401,16 +401,16 @@ public class Main {
             prescription.setDoctor(EM.find(Doctor.class, RANDOM.nextInt(DOCTORS_AMOUNT) + 1));
             prescription.setPatient(EM.find(Patient.class, RANDOM.nextInt(PATIENTS_AMOUNT) + 1));
             prescription.setIssueDate(new Timestamp(faker.date().birthday(0, 100).getTime()).toLocalDateTime());
-            prescription.setIsCancelled(false);
+            prescription.setIsCancelled(faker.number().numberBetween(1, 100) > 90);
             EM.persist(prescription);
-            prescription.setEntries(generateEntries(RANDOM.nextInt(10) + 1, prescription));
+            prescription.setEntries(generateEntries(RANDOM.nextInt(10) + 1, prescription, prescription.getIsCancelled()));
             EM.merge(prescription);
         }
 
         transaction.commit();
     }
 
-    private static Set<Entry> generateEntries(int how_many, Prescription prescription) {
+    private static Set<Entry> generateEntries(int how_many, Prescription prescription, Boolean isCancelled) {
         Set<Entry> entries = new HashSet<>();
         Set<Medicine> medicines = new HashSet<>();
         for (int i = 0; i < how_many; i++) {
@@ -424,8 +424,19 @@ public class Main {
             entry.setEntryPK(new EntryPK(entry.getMedicine().getId(), prescription.getId()));
             entry.setQuantity(RANDOM.nextInt(10) + 1);
             entry.setDosage(String.valueOf(RANDOM.nextInt(10) + 1) + " ml/" + String.valueOf(RANDOM.nextInt(7) + 1));
+            if(isCancelled) {
+                entry.setStatus(Status.CANCELED);
+            } else {
+                entry.setStatus(Status.values()[RANDOM.nextInt(Status.values().length-1)]);
+            }
             entry.setStatus(Status.values()[RANDOM.nextInt(Status.values().length)]);
-            entry.setPharmacist(EM.find(Pharmacist.class, RANDOM.nextInt(PHARMACISTS_AMOUNT) + 1));
+            entry.setPharmacy(EM.find(Pharmacy.class, RANDOM.nextInt(PHARMACIES_AMOUNT) + 1));
+            entry.setPharmacist(getPharmacistFromPharmacy(entry.getPharmacy()));
+            String annotation = faker.lorem().paragraph();
+            if (annotation.length() > 100) {
+                annotation = annotation.substring(0, 100);
+            }
+            entry.setAnnotation(annotation);
             EM.persist(entry);
 
             entries.add(entry);
@@ -448,6 +459,11 @@ public class Main {
         }
 
         return specializations;
+    }
+
+    private static Pharmacist getPharmacistFromPharmacy(Pharmacy pharmacy) {
+        Set<Pharmacist> pharmacists = pharmacy.getPharmacists();
+        return pharmacists.stream().skip(RANDOM.nextInt(pharmacists.size())).findFirst().orElse(null);
     }
 
     private static Set<Allergy> getRandomAllergies(Integer max) {
