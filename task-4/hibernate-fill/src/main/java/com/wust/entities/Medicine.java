@@ -21,9 +21,9 @@ public class Medicine {
     private Long id;
     @Column(nullable = false, length = 5)
     private String permitNumber;
-    @Column(nullable = false, length = 45)
+    @Column(nullable = false, length = 120)
     private String name;
-    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "pharmaceutical_form_id", referencedColumnName = "id", nullable = false)
     private PharmaceuticalForm pharmaceuticalForm;
     @ManyToOne

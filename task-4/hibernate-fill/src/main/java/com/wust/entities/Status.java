@@ -1,5 +1,5 @@
 package com.wust.entities;
 
 public enum Status {
-    COMPLETED, ORDERED, CANCELED
+    NEW, OMPLETED, ORDERED, CANCELED
 }

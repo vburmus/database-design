@@ -13,7 +13,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EntryPK implements Serializable {
-    private Long id;
     private Long medicineId;
     private Long prescriptionId;
 }
