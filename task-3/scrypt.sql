@@ -22,7 +22,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `online_prescription`.`medicine` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `permit_number` VARCHAR(5) NOT NULL,
-  `name` VARCHAR(45) NOT NULL,
+  `name` VARCHAR(120) NOT NULL,
   `pharmaceutical_form_id` INT NOT NULL,
   `category_symbol` VARCHAR(1) NOT NULL,
   PRIMARY KEY (`id`, `pharmaceutical_form_id`, `category_symbol`),
@@ -335,7 +335,7 @@ CREATE TABLE IF NOT EXISTS `online_prescription`.`prescription_realization` (
   `pharmacy_id` INT NOT NULL,
   `pharmacist_id` INT NOT NULL,
   `entry_id` INT NOT NULL,
-  `status` ENUM("COMPLETED", "ORDERED", "CANCELLED") NOT NULL,
+  `status` ENUM("NEW", "COMPLETED", "ORDERED", "CANCELLED") NOT NULL,
   `realized_quantity` INT NOT NULL,
   PRIMARY KEY (`pharmacy_id`, `pharmacist_id`, `entry_id`),
   INDEX `fk_prescription_realization_entry_idx` (`entry_id` ASC) VISIBLE,
