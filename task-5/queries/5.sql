@@ -9,6 +9,6 @@ FROM
 JOIN 
     pharmacist p ON e.pharmacist_id = p.id
 WHERE 
-    e.status = 'COMPLETED' AND e.pharmacist_id = 900
+    e.status = 'COMPLETED' AND e.pharmacist_id = 1002
 GROUP BY 
     e.pharmacist_id
