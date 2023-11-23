@@ -1,3 +1,11 @@
 CREATE INDEX idx_al_name ON allergy (name);
-CREATE INDEX idx_ph_name_addr ON pharmacy (name, address);
+CREATE INDEX idx_ph_addr ON pharmacy (address);
+CREATE INDEX idx_ph_name ON pharmacy (name);
 CREATE INDEX idx_sub_name ON substance (name);
+CREATE INDEX idx_doc_pesel ON doctor (pesel);
+CREATE INDEX idx_doc_lastname_firstname ON doctor (last_name, first_name);
+CREATE INDEX idx_pat_pesel ON patient (pesel);
+CREATE INDEX idx_pat_lastname_firstname ON patient (last_name, first_name);
+CREATE INDEX idx_pharmacist_pesel ON pharmacist (pesel);
+CREATE INDEX idx_ pharmacist_lastname_firstname ON pharmacist (last_name, first_name);
+CREATE INDEX idx_med_name ON medicine (name);
