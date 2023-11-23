@@ -7,5 +7,5 @@ CREATE INDEX idx_doc_lastname_firstname ON doctor (last_name, first_name);
 CREATE INDEX idx_pat_pesel ON patient (pesel);
 CREATE INDEX idx_pat_lastname_firstname ON patient (last_name, first_name);
 CREATE INDEX idx_pharmacist_pesel ON pharmacist (pesel);
-CREATE INDEX idx_ pharmacist_lastname_firstname ON pharmacist (last_name, first_name);
+CREATE INDEX idx_pharmacist_lastname_firstname ON pharmacist (last_name, first_name);
 CREATE INDEX idx_med_name ON medicine (name);
