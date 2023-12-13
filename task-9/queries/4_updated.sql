@@ -9,7 +9,7 @@ FROM
 JOIN 
     prescription p ON ph.id = p.pharmacy_id
 WHERE 
-    e.status = 'COMPLETED'
+    p.status = 'COMPLETED'
 GROUP BY 
     pharmacy_id
 ORDER BY 
