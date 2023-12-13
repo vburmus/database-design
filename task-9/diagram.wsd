@@ -1,0 +1,61 @@
+@startuml
+skinparam linetype ortho
+
+rectangle "Pacjent" as pacjent {
+}
+
+rectangle "Lekarz" as lekarz {
+}
+
+rectangle "Lek" as lek {
+}
+
+rectangle "Substancja" as substancja {
+}
+
+rectangle "Apteka" as apteka {
+}
+
+rectangle "Farmaceuta" as aptekarz {
+}
+
+rectangle "Specjalizacja" as specjalizacja {
+}
+
+rectangle "Recepta" as recepta {
+}
+
+rectangle "Alergia" as alergia {
+}
+
+rectangle "Dawkowanie" as substancja {
+}
+
+rectangle "Uzytkownik" as użytkownik {
+}
+
+rectangle "Kategoria lekow" as kategoria_lekow {
+}
+
+
+rectangle "Postać farmaceutyczna" as postac_farmaceutyczna{
+}
+
+użytkownik "0.1" ||--o| "1" pacjent
+użytkownik "0.1" ||--o| "1" lekarz
+użytkownik "0.1" ||--o| "1" aptekarz
+lekarz "1.n" }o--|{ "0.n" specjalizacja
+kategoria_lekow "1.n" }o--|{ "0.n" specjalizacja
+pacjent "0.n" }o--o{ "0.n" alergia
+lekarz "0.n" ||--o{ "1" recepta
+recepta "1" }o--|| "0.n" pacjent
+recepta "1" }o--|| "0.n" lek
+recepta "1" }o--|| "0.n" aptekarz
+recepta "1" }o--|| "0.n" apteka
+lek "1.n" }o--|{ "0.n" substancja
+lek "1.n" }o--|{ "0.n" kategoria_lekow
+aptekarz "0.n" }o--o{ "0.n" apteka
+alergia "1.n" }o--|{ "0.n" substancja
+lek -[hidden]- postac_farmaceutyczna
+lek "1.n" }o--|{ "0.n" postac_farmaceutyczna
+@enduml
