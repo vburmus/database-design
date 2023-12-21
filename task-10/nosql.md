@@ -19,3 +19,29 @@
 - Audyt bezpieczeństwa nie jest dostępny w Neo4j.
 - Skalowalność (trudno skalować na wielu serwerach).
 - Grafowe bazy danych są słabe na działania w czasie rzeczywistym na danych.
+
+## Relational Databases(R) vs Graph Databases(G)
+
+### Model
+
+R - tabele
+
+G - węzły rerezentowane dokumentami JSON
+
+### Operacje
+
+R - CRUD
+
+G - CRUD i matematyczne operacje na grafie
+
+### Skalowalność
+
+R - łatwe wertykalne skalowanie
+
+G - łatwe horyzontalne skalowanie.  
+
+### Wydajność
+
+R - używa roznych podzapytan i dodatkowych kwerend przy zlozonych zapytaniach
+
+G - doskonale sprawdza się w reprezentowaniu i odpytywaniu relacji między danymi.
