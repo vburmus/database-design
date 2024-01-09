@@ -1,6 +1,25 @@
 # Zajęcia 11 - Faza konceptualna i fizyczna
 
 
+### 1. W jaki sposób definiowane są możliwe związki pomiędzy przechowywanymi danymi? Jakie wykorzystane mechanizmy zapewnienia spójności (jeśli istnieją)?  Czym różni się paradygmat BASE od paradygmatu ACID ? 
+ - Związki między przechowywanymi danymi definiowane są za pomocą grafu. Graf składa się z węzłów, które reprezentują encje lub obiekty, oraz z krawędzi, które reprezentują relacje lub połączenia między tymi encjami.
+ - BASE:
+     - Basically Available - Oznacza, że system jest zawsze dostępny, nawet w przypadku awarii częściowej. Nie zapewnia to jednak pełnej spójności danych w każdym przypadku.
+
+     - Soft state - Oznacza, że stan danych może zmieniać się nawet bez wprowadzania zmian, ponieważ nie ma wymogu utrzymania spójności danych w czasie rzeczywistym.
+
+     - Eventually Consistent - Oznacza, że po jakimś czasie, po wprowadzeniu zmian, system osiągnie spójność danych. Systemy baz danych oparte na tej filozofii nie gwarantują natychmiastowej spójności danych po każdej operacji, ale zapewniają, że po pewnym czasie dane będą spójne.
+ - Wykorzystany jest mechanizm ACID.
+  
+- Różnice:
+  - Skalowanie: Baza danych, korzystająca z ACID, jest trudniejsza w skalowaniu ponieważ opiera się na niesprzeczności(consistency). Jednocześnie tylko jedna transakcja dozwolona dla rekordu, co sprawia ciężkie horyzontalne skalowanie.
+  - Elastyczność: Z powyższego wynika, że jeżeli dwie aplikacje jednocześnie będą chcieli korzystać z tego samego rekordu, wtedy druga musi zaczekać. W BASE natomiast operacje dozwolone odrazu.
+  - Synchronizacja: ACID blokuje record pod czas transakcji i synchronizuje dane dopiero po akceptowaniu czy odrzucaniu poprzedniej. BASE natomiast pozwala na czasową niespójność, musimy być tego świadomi.
+ ![image](https://github.com/vburmus/database-design/assets/99145798/d519e1ca-4e8a-467d-af08-0d60fbbcdd6d)
+
+- BASE vs ACID
+  BASE - dostępność, ACID - spójność
+  ![image](https://github.com/vburmus/database-design/assets/99145798/3baf3f93-b65c-4179-9557-730e0c43a86e)
 
 ### 2. Prezentacja przykładowych zapytań
 - Wyszukiwanie wszystkich węzłów wraz z połączeniami w bazie danych:
