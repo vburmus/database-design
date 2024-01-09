@@ -77,3 +77,21 @@ CREATE (:Patient {firstName: "Adam", lastName:"Kowalski", pesel: "11111111111"})
 MATCH (pat:Patient {pesel: "11111111111"}), (acc:User {email: "adamkw@yahoo.com"})
 CREATE (pat) -[:HAS_ACCOUNT] -> acc
 ```
+- Przykładowa kwerenda obliczająca doktora, który wydał najwięcej recept:
+```
+MATCH (d:Doctor)
+OPTIONAL MATCH (p:Prescription)-[:ASSIGNED_BY]->(d)
+WITH
+    d.id AS doctor_id,
+    d.lastName AS surname,
+    d.firstName AS name,
+    COUNT(p) AS number_of_prescriptions
+RETURN 
+    doctor_id,
+    surname,
+    name,
+    number_of_prescriptions
+ORDER BY 
+    number_of_prescriptions DESC, surname ASC, name ASC
+LIMIT 1
+```
