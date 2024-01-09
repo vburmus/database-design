@@ -49,7 +49,7 @@ MATCH (patient:Patient) RETURN patient LIMIT 10
     ```
 - Dodawanie węzłów/rekordów do bazy wraz z połączeniem:
 ```
-MATCH (:Patient {firstName: "Adam", lastName:"Kowalski", pesel: "11111111111"})
+CREATE (:Patient {firstName: "Adam", lastName:"Kowalski", pesel: "11111111111"})
 -[:HAS_ACCOUNT] ->
 (:User {email: "adamkw@yahoo.com", isAdmin: "False", password: "qwerty", phoneNumber: "79-494-96-03"})
 ```
