@@ -1,3 +1,7 @@
 /.vscode/
 /task-12/env
 .env
+.pyc
+*.pyc
+/task-12/__pycache__/
+

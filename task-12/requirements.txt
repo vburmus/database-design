@@ -1,0 +1,8 @@
+Faker==22.4.0
+neo4j==5.16.0
+python-dateutil==2.8.2
+python-dotenv==1.0.0
+pytz==2023.3.post1
+setuptools==65.5.0
+six==1.16.0
+tqdm==4.66.1
