@@ -37,6 +37,9 @@ jak Neo4j, sprawdzają się doskonale w przypadkach, gdzie analiza relacji międ
 projektu, a w niektórych sytuacjach może być korzystne skorzystanie z obu typów baz danych w ramach jednego systemu, wykorzystując mocne strony każdej z nich.
 
 ### Czy pojawiła się konieczność zmiany założeń lub wybrane wymagania były niemożliwe do zrealizowania?
+Nie, ponieważ grafowe bazy danych są podobne do relacyjnych baz danych, ale zamiast tabel wykorzystują węzły i krawędzie.
+Też korzystają z ACID, co sprawia, że nie musieliśmy zmieniać założeń ani wymagań.
+Jedyną różnicą była struktura danych, która była formowana w grafie przez Neo4j, a nie ręcznie.
 ### W jaki sposób wybrana baza NoSQL różni się od bazy relacyjnej pod względem definiowania zapytań?
  - Cypher
 ```
@@ -68,3 +71,7 @@ ORDER BY number_of_allergies DESC, p.last_name ASC, p.first_name ASC
 Cypher jest bardziej zrozumiały i czytelny, ponieważ jest bardziej zbliżony do języka naturalnego oraz zapytania w Neo4j są zorientowane 
 na relacje.
 ### Jakie są główne różnice w wydajności i jakie są ich przyczyny
+- Neo4j jest szybsze w przypadku zapytań, które wymagają analizy relacji między danymi i dużo złączeń!
+![Join Example](join.png)
+![Join Exampple 2](joid-2.png)
+- Lepsza skalowalność
