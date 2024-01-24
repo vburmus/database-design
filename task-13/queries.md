@@ -79,4 +79,44 @@ ORDER BY prescription_count DESC, name ASC;
 ```
 ![q6](https://github.com/vburmus/database-design/assets/118392004/94b7edf3-d14b-4e3f-8417-c7835f11d6ad)
 ---
+### 7. Zamienniki leku po substancji
+```
+MATCH (m:Medicine)-[:CONTAINS]->(:Substance {name: 'z powodu'})
+RETURN
+    m.permit_number AS permit_number,
+    m.name AS medicine_name;
+```
+![q7](https://github.com/vburmus/database-design/assets/118392004/9126c51b-988e-4f9f-84ac-ac0caf2af935)
+---
+### 8. Niezrealizowane recepty
+```
+MATCH (pr:Prescription)-[:FOR]->(p:Patient)
+WHERE pr.status = 'not_realized'
+RETURN
+    p.pesel AS patient_pesel,
+    p.last_name AS patient_surname,
+    p.first_name AS patient_name,
+    pr.expiration_date
+ORDER BY pr.issue_date DESC, patient_surname ASC, patient_name ASC;
+```
+![q8](https://github.com/vburmus/database-design/assets/118392004/61117339-3e87-41b4-86b3-971208b1e8e3)
+---
+### 9. Spis lekow ze skladnikami
+```
+MATCH (m:Medicine)-[:CONTAINS]->(s:Substance)
+RETURN
+    m.permit_number AS permit_number,
+    m.name AS medicine_name,
+    COLLECT(s.name) AS substances_list;
+```
+![q9](https://github.com/vburmus/database-design/assets/118392004/ec4d473e-3991-46ab-9eeb-109b4ee311e4)
+---
+### 10. Ilosc lekow w poszczegolnych formach farmaceutycznych
+```
+MATCH (pf:PharmaceuticalForm)<-[:IS]-(m:Medicine)
+RETURN
+    pf.name AS pharmaceutical_form,
+    COUNT(m) AS number_of_medicines;
+```
+![q10](https://github.com/vburmus/database-design/assets/118392004/3c76fd44-b36a-413e-85b4-c92fae1778bd)
 
